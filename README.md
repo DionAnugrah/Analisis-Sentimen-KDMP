@@ -133,10 +133,6 @@ Tahapan preprocessing otomatis:
 5. Tokenization
 6. Stemming/Lemmatization
 
-## 📞 Support
-
-Untuk bantuan atau pertanyaan, hubungi tim data science KDMP.
-
 ---
 
-© 2024 Koperasi Desa Merah Putih
+© 2026 Koperasi Desa Merah Putih
