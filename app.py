@@ -11,7 +11,7 @@ Struktur:
 import streamlit as st
 
 from core.models import muat_semua
-from ui import theme
+from ui import animasi, theme
 from ui.bagian import about, coba, features, home, technology
 from ui.icons import buat_favicon
 from ui.layout import footer, header
@@ -33,6 +33,7 @@ def main() -> None:
     for bagian in (home, about, technology, features, coba):     # urutan = urutan scroll
         bagian.render(models)
     footer()
+    animasi.pasang()  # animasi masuk saat scroll
 
 
 main()

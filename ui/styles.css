@@ -345,8 +345,9 @@ button[data-baseweb="tab"][aria-selected="true"] p { color: #fff !important; }
 .st-key-btn_analisis button { min-height: 3.3rem; font-size: 1rem; border-radius: 16px !important; }
 
 /* =====================================================================================================
-   ANIMASI. Murni CSS (Streamlit membuang <script>). Animasi masuk memakai properti `translate`/`scale`, sedangkan
-   hover memakai `transform`, sehingga keduanya tidak saling menimpa.
+   ANIMASI. Animasi saat halaman dibuka murni CSS. Animasi saat di-scroll berbasis waktu (sama seperti hero) dipicu
+   skrip kecil di ui/animasi.py; bila skrip tidak berjalan, CSS scroll-driven di bawah menjadi cadangan. Animasi masuk
+   memakai properti `translate`/`scale`, sedangkan hover memakai `transform`, sehingga keduanya tidak saling menimpa.
    ===================================================================================================== */
 @keyframes naik { from { opacity: 0; translate: 0 28px; } to { opacity: 1; translate: 0 0; } }
 @keyframes dariKiri { from { opacity: 0; translate: -40px 0; } to { opacity: 1; translate: 0 0; } }
@@ -365,7 +366,7 @@ button[data-baseweb="tab"][aria-selected="true"] p { color: #fff !important; }
 .hcard-t + .hrow .hbar i { animation-delay: .8s; } .hrow + .hrow .hbar i { animation-delay: 1s; }
 .badge svg { animation: putar 8s linear infinite; }
 @supports ((-webkit-background-clip: text) or (background-clip: text)) {
-  .h1 .acc { color: transparent; -webkit-background-clip: text; background-clip: text; background-size: 200% 100%;
+  .h1 .acc, .part-title .acc { color: transparent; -webkit-background-clip: text; background-clip: text; background-size: 200% 100%;
     background-image: linear-gradient(90deg, var(--primary-dark), var(--primary), #fb7185, var(--primary), var(--primary-dark));
     animation: kilau 7s linear infinite; }
 }
@@ -375,17 +376,62 @@ button[data-baseweb="tab"][aria-selected="true"] p { color: #fff !important; }
 .bar-fill { transform-origin: left; animation: tumbuh .9s cubic-bezier(.2,.8,.2,1) .15s both; }
 [data-baseweb="tab-panel"] { animation: naik .4s ease both; }
 
-/* --- saat di-scroll: muncul ketika masuk layar (CSS scroll-driven animation; browser lama menampilkan tanpa animasi) --- */
+/* --- saat di-scroll, mode utama: animasi BERBASIS WAKTU, sama seperti hero. Skrip (ui/animasi.py) memberi class .rv
+       (tersembunyi) lalu .rv-in ketika elemen masuk layar. .rv-in dicabut lagi setelah elemen keluar sepenuhnya dari
+       layar, sehingga animasinya diputar ULANG setiap kali terlihat (scroll ke bawah maupun ke atas). --- */
+.js-rv .rv:not(.rv-in) { opacity: 0; translate: 0 28px; }
+.js-rv .split > .scard.rv:not(.rv-in) { translate: 40px 0; }
+.js-rv .rv.rv-in { animation: naik .8s cubic-bezier(.2,.7,.2,1) var(--d, 0s) both; }
+.js-rv .split > .scard.rv.rv-in { animation-name: dariKanan; }
+
+/* judul bagian: eyebrow -> judul -> subjudul muncul bertahap, persis seperti teks hero */
+.js-rv .part.rv:not(.rv-in) { opacity: 1; translate: none; }
+.js-rv .part.rv:not(.rv-in) > * { opacity: 0; translate: 0 28px; }
+.js-rv .part.rv.rv-in { animation: none; }
+.js-rv .part.rv.rv-in > * { animation: naik .8s cubic-bezier(.2,.7,.2,1) both; }
+.js-rv .part.rv.rv-in > .part-title { animation-delay: .08s; }
+.js-rv .part.rv.rv-in > .part-sub { animation-delay: .18s; }
+
+/* About: butir di kiri masuk satu per satu dari kiri, lalu baris contoh di kartu kanan menyusul */
+.js-rv .split > div:first-child.rv:not(.rv-in) { opacity: 1; translate: none; }
+.js-rv .split > div:first-child.rv:not(.rv-in) .li-item { opacity: 0; translate: -40px 0; }
+.js-rv .split > div:first-child.rv.rv-in { animation: none; }
+.js-rv .split > div:first-child.rv.rv-in .li-item { animation: dariKiri .8s cubic-bezier(.2,.7,.2,1) both; }
+.js-rv .split > div:first-child.rv.rv-in .li-item:nth-child(2) { animation-delay: .12s; }
+.js-rv .split > div:first-child.rv.rv-in .li-item:nth-child(3) { animation-delay: .24s; }
+.js-rv .split > .scard.rv:not(.rv-in) .srow { opacity: 0; }
+.js-rv .split > .scard.rv.rv-in .srow { animation: naik .7s cubic-bezier(.2,.7,.2,1) both; }
+.js-rv .split > .scard.rv.rv-in .srow:nth-child(2) { animation-delay: .35s; }
+.js-rv .split > .scard.rv.rv-in .srow:nth-child(3) { animation-delay: .47s; }
+.js-rv .split > .scard.rv.rv-in .srow:nth-child(4) { animation-delay: .59s; }
+
+/* ikon pada kartu "pop" sesaat setelah kartunya muncul (memakai `scale`, bukan `transform`, agar tidak menimpa hover) */
+@keyframes pop { from { opacity: 0; scale: .55; } to { opacity: 1; scale: 1; } }
+.js-rv .rv.rv-in .sq { animation: pop .7s cubic-bezier(.3,1.5,.5,1) calc(var(--d, 0s) + .3s) both; }
+.js-rv .split > div:first-child.rv.rv-in .li-item .sq { animation-delay: .3s; }
+.js-rv .split > div:first-child.rv.rv-in .li-item:nth-child(2) .sq { animation-delay: .42s; }
+.js-rv .split > div:first-child.rv.rv-in .li-item:nth-child(3) .sq { animation-delay: .54s; }
+.js-rv .rv:not(.rv-in) .gb-fill { transform: scaleX(0); }
+.js-rv .rv.rv-in .gb-fill { transform-origin: left; animation: tumbuh 1.1s cubic-bezier(.2,.8,.2,1) .35s both; }
+/* hero ikut diputar ulang: saat keluar dari layar kembali ke keadaan awal, saat kembali terlihat animasinya main lagi */
+.js-rv .hero2.rvh:not(.rv-in) :is(.badge, .h1, .lead, .cta, .hstats, .hcard) { animation: none; opacity: 0; }
+.js-rv .hero2.rvh:not(.rv-in) .hbar i { animation: none; transform: scaleX(0); }
+/* komponen skrip tidak boleh memakan ruang */
+[data-testid="stElementContainer"]:has(iframe[height="0"]), [data-testid="stIFrame"][height="0"] {
+  position: absolute; width: 0; height: 0; margin: 0; overflow: hidden; opacity: 0; pointer-events: none; }
+
 [data-testid="stMain"], section.main, .stApp { scroll-timeline: --halaman block; }
+
+/* --- cadangan bila skrip tidak berjalan: animasi mengikuti posisi scroll (scroll-driven; browser lama tampil tanpa animasi) --- */
 @supports (animation-timeline: view()) {
-  .part, .sec, .grid > *, .status-row, .cap, .footer2 .f-grid > *, .split > div:first-child, .split > .scard, .st-key-tool_card {
+  html:not(.js-rv) .part, html:not(.js-rv) .sec, html:not(.js-rv) .grid > *, html:not(.js-rv) .status-row, html:not(.js-rv) .cap, html:not(.js-rv) .footer2 .f-grid > *, html:not(.js-rv) .split > div:first-child, html:not(.js-rv) .split > .scard, html:not(.js-rv) .st-key-tool_card {
     animation-name: naik; animation-duration: auto; animation-timing-function: linear; animation-fill-mode: both;
     animation-timeline: view(); animation-range: entry 0% entry 38%; }
-  .split > div:first-child { animation-name: dariKiri; }
-  .split > .scard { animation-name: dariKanan; }
-  .grid > :nth-child(3n+2) { animation-range: entry 6% entry 44%; }
-  .grid > :nth-child(3n+3) { animation-range: entry 12% entry 50%; }
-  .gb-fill { transform-origin: left; animation-name: tumbuh; animation-duration: auto; animation-timing-function: linear;
+  html:not(.js-rv) .split > div:first-child { animation-name: dariKiri; }
+  html:not(.js-rv) .split > .scard { animation-name: dariKanan; }
+  html:not(.js-rv) .grid > :nth-child(3n+2) { animation-range: entry 6% entry 44%; }
+  html:not(.js-rv) .grid > :nth-child(3n+3) { animation-range: entry 12% entry 50%; }
+  html:not(.js-rv) .gb-fill { transform-origin: left; animation-name: tumbuh; animation-duration: auto; animation-timing-function: linear;
     animation-fill-mode: both; animation-timeline: view(); animation-range: entry 10% entry 85%; }
 }
 /* garis kemajuan scroll di bawah navbar */
@@ -438,6 +484,12 @@ button[data-baseweb="tab"]:hover { transform: translateY(-1px); }
 /* --- pengguna yang memilih mengurangi gerak: semua animasi & transisi dimatikan (konten tetap tampil) --- */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
+  .js-rv .rv:not(.rv-in) { opacity: 1 !important; translate: none !important; }
+  .js-rv .rv:not(.rv-in) .gb-fill { transform: none !important; }
+  .js-rv .part.rv:not(.rv-in) > *, .js-rv .split > div:first-child.rv:not(.rv-in) .li-item,
+  .js-rv .split > .scard.rv:not(.rv-in) .srow { opacity: 1 !important; translate: none !important; }
+  .js-rv .hero2.rvh:not(.rv-in) :is(.badge, .h1, .lead, .cta, .hstats, .hcard) { opacity: 1 !important; }
+  .js-rv .hero2.rvh:not(.rv-in) .hbar i { transform: none !important; }
 }
 
 /* ---------- Layar kecil ---------- */
