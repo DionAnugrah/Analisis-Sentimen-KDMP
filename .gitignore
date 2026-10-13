@@ -15,6 +15,10 @@ env/
 ENV/
 .venv/
 
+#laporan dan data csv
+laporan/
+*csv
+
 # Environment variables
 .env
 .env.local
