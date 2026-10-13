@@ -1,0 +1,47 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Caches and temporary files
+*.pkl
+stem_cache.pkl
+.ipynb_checkpoints/
+.pytest_cache/
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Large model binaries (>100 MB cannot be pushed to standard GitHub without Git LFS)
+indobert_sentimen_kdmp.joblib
+model_indobert_sentimen_kdmp/
+
+# Output batch analysis files
+hasil_analisis_*.csv
+hasil_analisis_kdmp.csv
+
+# IDE & Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.settings/
+
+# Operating System files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db

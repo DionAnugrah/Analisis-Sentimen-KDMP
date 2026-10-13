@@ -1,0 +1,9 @@
+# Tema dasar dikunci ke "light". Mode gelap ditangani oleh CSS aplikasi (tombol tema),
+# jadi widget bawaan Streamlit (tabel, dropdown, menu) tidak ikut berubah mengikuti
+# pengaturan gelap/terang sistem operasi dan bertabrakan dengan tema aplikasi.
+[theme]
+base = "light"
+primaryColor = "#dc2626"
+backgroundColor = "#fdf6f6"
+secondaryBackgroundColor = "#fff1f1"
+textColor = "#1f1717"
