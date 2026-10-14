@@ -29,8 +29,12 @@ _SKRIP = """<span id="kdmp-anim" hidden></span><script>
 (function () {
   // Di halaman utama (st.html) window.parent === window; di dalam iframe ia menunjuk halaman induk. Skrip yang sama
   // berlaku untuk keduanya.
-  var P = window.parent, D;
-  try { D = P.document; D.documentElement; } catch (e) { return; }
+
+  var P = window, D = document;
+  if (!D.querySelector(".stApp")) {      // bukan halaman app (mis. di dalam iframe): pakai induknya
+    try { P = window.parent; D = P.document; D.documentElement; } catch (e) { return; }
+}
+
   var SEL = "__SELEKTOR__", HERO = "__HERO__";
   var lama = P.__rvKdmp;                              // komponen dimuat ulang: lepas pengamat lama
   if (lama) { try { lama.masuk.disconnect(); lama.keluar.disconnect(); lama.mo.disconnect(); } catch (e) {} }
