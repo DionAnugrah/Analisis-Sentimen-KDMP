@@ -416,7 +416,8 @@ button[data-baseweb="tab"][aria-selected="true"] p { color: #fff !important; }
 /* hero ikut diputar ulang: saat keluar dari layar kembali ke keadaan awal, saat kembali terlihat animasinya main lagi */
 .js-rv .hero2.rvh:not(.rv-in) :is(.badge, .h1, .lead, .cta, .hstats, .hcard) { animation: none; opacity: 0; }
 .js-rv .hero2.rvh:not(.rv-in) .hbar i { animation: none; transform: scaleX(0); }
-/* komponen skrip tidak boleh memakan ruang */
+/* wadah skrip animasi tidak boleh memakan ruang: st.html (penanda #kdmp-anim), st.iframe, atau components.html */
+[data-testid="stElementContainer"]:has(#kdmp-anim), [data-testid="stElementContainer"]:has(iframe[srcdoc*="kdmp-anim"]),
 [data-testid="stElementContainer"]:has(iframe[height="0"]), [data-testid="stIFrame"][height="0"] {
   position: absolute; width: 0; height: 0; margin: 0; overflow: hidden; opacity: 0; pointer-events: none; }
 

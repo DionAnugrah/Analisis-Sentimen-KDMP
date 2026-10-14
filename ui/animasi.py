@@ -2,7 +2,9 @@
 elemen masuk layar lagi (scroll ke bawah maupun ke atas).
 
 CSS tidak bisa memicu animasi berbasis waktu ketika sebuah elemen masuk layar. Karena itu skrip kecil
-(IntersectionObserver) dijalankan lewat komponen HTML tanpa tinggi. Ada dua pengamat dengan tugas terpisah:
+(IntersectionObserver) dijalankan lewat ``st.html(..., unsafe_allow_javascript=True)``: skrip berjalan langsung di
+halaman utama, tanpa iframe. ``st.components.v1.html`` TIDAK dipakai lagi karena sudah deprecated (Streamlit >= 1.56)
+dan dijadwalkan dihapus; ia hanya menjadi pilihan terakhir untuk Streamlit lama (lihat ``pasang``). Ada dua pengamat dengan tugas terpisah:
 
 * ``masuk``  : menambah class ``rv-in`` saat elemen muncul di layar (sedikit di atas tepi bawah, di bawah navbar),
                lalu CSS memainkan animasi ``naik`` / ``dariKiri`` / ``dariKanan`` dengan durasi, easing, dan jeda
@@ -23,8 +25,10 @@ SELEKTOR = (".part, .sec, .grid > *, .status-row, .cap, .footer2 .f-grid > *, "
             ".split > div:first-child, .split > .scard, .st-key-tool_card")
 SELEKTOR_HERO = ".hero2"
 
-_SKRIP = """<script>
+_SKRIP = """<span id="kdmp-anim" hidden></span><script>
 (function () {
+  // Di halaman utama (st.html) window.parent === window; di dalam iframe ia menunjuk halaman induk. Skrip yang sama
+  // berlaku untuk keduanya.
   var P = window.parent, D;
   try { D = P.document; D.documentElement; } catch (e) { return; }
   var SEL = "__SELEKTOR__", HERO = "__HERO__";
@@ -72,10 +76,35 @@ _SKRIP = """<script>
 </script>""".replace("__SELEKTOR__", SELEKTOR).replace("__HERO__", SELEKTOR_HERO)
 
 
+def _via_html() -> None:
+    import streamlit as st
+    # Streamlit lama: TypeError (st.html belum punya unsafe_allow_javascript) -> lanjut ke cara berikutnya
+    st.html(_SKRIP, unsafe_allow_javascript=True)
+
+
+def _via_iframe() -> None:
+    import streamlit as st
+    # tinggi 1 (bukan 0) agar lolos validasi ukuran; wadahnya disembunyikan oleh CSS
+    st.iframe(_SKRIP, height=1)
+
+
+def _via_components() -> None:
+    import streamlit.components.v1 as components      # deprecated: hanya untuk Streamlit lama
+    components.html(_SKRIP, height=0)
+
+
 def pasang() -> None:
-    """Pasang skrip animasi. Kegagalan apa pun diabaikan; CSS cadangan tetap memberi animasi scroll."""
-    try:
-        import streamlit.components.v1 as components
-        components.html(_SKRIP, height=0)
-    except Exception:
-        pass
+    """Pasang skrip animasi memakai cara pertama yang tersedia di versi Streamlit yang sedang berjalan:
+
+    1. ``st.html(..., unsafe_allow_javascript=True)``  skrip langsung di halaman utama (disarankan)
+    2. ``st.iframe(...)``                              skrip di iframe, menjangkau induk lewat ``window.parent``
+    3. ``st.components.v1.html(...)``                  Streamlit lama saja (menghasilkan peringatan deprecation)
+
+    Kegagalan apa pun diabaikan; CSS cadangan tetap memberi animasi scroll.
+    """
+    for cara in (_via_html, _via_iframe, _via_components):
+        try:
+            cara()
+            return
+        except Exception:
+            continue
