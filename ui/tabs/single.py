@@ -11,9 +11,9 @@ from ui.utils import STRETCH, tulis_html
 
 # (key tombol, label, contoh komentar) untuk Quick Test
 _CONTOH = [
-    ("qt_pos", "😊 Positif", "Programnya sangat membantu warga desa, semoga terus berjalan dengan baik"),
-    ("qt_net", "😐 Netral", "Ada yang tahu jadwal rapat anggota koperasi desa bulan ini?"),
-    ("qt_neg", "😡 Negatif", "Pelayanannya lambat dan tidak sesuai harapan, sangat mengecewakan"),
+    ("qt_pos", "Positif", "Programnya sangat membantu warga desa, semoga terus berjalan dengan baik"),
+    ("qt_net", "Netral", "Belum ada kopdes di desaku"),
+    ("qt_neg", "Negatif", "Harganya sangat mahal dan tidak sesuai kualitas yang dijanjikan, pelayanan lambat pula."),
 ]
 
 
@@ -41,6 +41,10 @@ def render(models: Models) -> None:
     if not teks.strip():
         notif("warn", "Silakan masukkan komentar terlebih dahulu.")
         return
+
+    tulis_html(
+        f'<div class="part-sub">Hasil model bisa saja salah. Cek kembali hasil yang diberikan model</div>'
+    )
 
     with st.spinner("Sedang menganalisis..."):
         hasil = analisis_tunggal(teks, models)

@@ -96,6 +96,10 @@ def _model_tersedia(hasil: pd.DataFrame):
 
 
 def _tampilkan_hasil(hasil: pd.DataFrame) -> None:
+    tulis_html(
+        f'<div class="part-sub">Hasil model bisa saja salah. Cek kembali hasil yang diberikan model</div>'
+    )
+
     st.markdown("---")
     section("trend", "Ringkasan Hasil")
     _kartu_ringkasan(hasil)

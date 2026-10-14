@@ -33,11 +33,11 @@ def header() -> None:
     kolom internal Streamlit (st.columns).
     """
     dark = theme.is_dark()
-    nav = "".join(tautan(k, label, "nav-link") for k, label in NAV) + tautan("coba", "Try Now", "nav-cta")
+    nav = "".join(tautan(k, label, "nav-link") for k, label in NAV) + tautan("coba", "Coba Sekarang", "nav-cta")
     with kontainer("header"):
         tulis_html(
             f'<div class="topbar"><div class="brand">{logo(42, "head")}<div class="brand-txt">'
-            f'<div class="brand-name">KDMP Sentiment</div><div class="brand-sub">AI-Powered Analysis</div></div></div>'
+            f'<div class="brand-name">KDMP Sentiment</div><div class="brand-sub">SVM and IndoBERT Algorithm</div></div></div>'
             f'<nav class="nav">{nav}</nav></div>'
         )
         st.button(
@@ -59,7 +59,7 @@ def footer() -> None:
             <div class="f-grid">
                 <div>
                     <div class="brand">{logo(38, "foot")}<div class="brand-txt">
-                        <div class="brand-name">KDMP Sentiment</div><div class="brand-sub">AI-Powered Analysis</div></div></div>
+                        <div class="brand-name">KDMP Sentiment</div><div class="brand-sub">SVM and IndoBERT Algorithm</div></div></div>
                     <div class="f-desc">Sistem analisis sentimen komentar Koperasi Desa Merah Putih
                     dengan perbandingan model SVM dan IndoBERT.</div>
                 </div>

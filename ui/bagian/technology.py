@@ -41,7 +41,7 @@ def render(models: Models) -> None:
                   "serta penghapusan stopword (khusus SVM).", "Text Cleaning"),
     ], 4))
 
-    tulis_html(f'<div class="status-row">{_status(NAMA_SVM, models.ada_svm)}{_status(NAMA_BERT, models.ada_bert)}</div>')
+    # tulis_html(f'<div class="status-row">{_status(NAMA_SVM, models.ada_svm)}{_status(NAMA_BERT, models.ada_bert)}</div>')
     if not models.ada_bert:
         _diagnostik_indobert(models)
 

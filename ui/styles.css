@@ -162,7 +162,7 @@ html, body, .stApp, [data-testid="stAppViewContainer"], [data-testid="stMain"], 
 .part-eyebrow { display: block; font-size: .72rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase;
   color: var(--primary); margin-bottom: .8rem; }
 .part-title { font-size: clamp(1.8rem, 3.8vw, 2.7rem); font-weight: 800; letter-spacing: -.025em; color: var(--text); line-height: 1.15; }
-.part-sub { color: var(--muted); font-size: 1rem; line-height: 1.7; margin: .9rem auto 0; max-width: 640px; }
+.part-sub { color: var(--muted); font-size: 1rem; line-height: 1.7; margin: .9rem auto 0; max-width: 640px; text-align: center; }
 
 /* ---------- Konten halaman ---------- */
 .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.3rem; margin-bottom: 1rem; }
