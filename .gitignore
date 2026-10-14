@@ -25,8 +25,8 @@ laporan/
 .env.*.local
 
 # Large model binaries (>100 MB cannot be pushed to standard GitHub without Git LFS)
-indobert_sentimen_kdmp.joblib
-model_indobert_sentimen_kdmp/
+# indobert_sentimen_kdmp.joblib
+# model_indobert_sentimen_kdmp/
 
 # Output batch analysis files
 hasil_analisis_*.csv
